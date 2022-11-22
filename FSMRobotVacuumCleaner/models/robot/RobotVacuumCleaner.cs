@@ -60,6 +60,8 @@ public class RobotVacuumCleaner
         if (_battery.GetCurrentChargeLevel() < requiredChargeToReturn)
         {
             Console.WriteLine("Low battery");
+            _brain.PopState();
+            _brain.PushState(MoveHome);
         }
         else if (_dustCollector.IsFull())
         {
@@ -71,6 +73,11 @@ public class RobotVacuumCleaner
             _dustCollector.Fill(5);
             _brain.PushState(Move);
         }
+    }
+
+    private void MoveHome()
+    {
+        
     }
 
     private void Move()

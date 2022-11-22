@@ -6,15 +6,16 @@ namespace FSMRobotVacuumCleaner.algo;
 
 public class MotionControl
 {
-    private int[,] _map;
+    private List<List<int>> _map;
+    private Direction _currentDirection;
     private TimeSpan _actionTimeout;
     private TimeOnly _actionStart;
     private TimeOnly _actionEnd;
     private Point _currentPoint;
-    private Direction _currentDirection;
     private int _stepSize;
 
-    public MotionControl(int[,] map, TimeSpan actionTimeout, Point currentPoint, Direction currentDirection, int stepSize)
+    public MotionControl(List<List<int>> map, TimeSpan actionTimeout, Point currentPoint, Direction currentDirection,
+        int stepSize)
     {
         _map = map;
         _actionTimeout = actionTimeout;
@@ -74,7 +75,7 @@ public class MotionControl
             _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
         };
     }
-    
+
     private void TurnRight()
     {
         _currentDirection = _currentDirection switch
@@ -113,8 +114,8 @@ public class MotionControl
         return _currentDirection switch
         {
             Direction.Up => _currentPoint.Y - _stepSize <= 0,
-            Direction.Down => _currentPoint.Y + _stepSize >= _map.GetLength(0),
-            Direction.Right => _currentPoint.X + _stepSize >= _map.GetLength(1),
+            Direction.Down => _currentPoint.Y + _stepSize >= _map.Count,
+            Direction.Right => _currentPoint.X + _stepSize >= _map.First().Count,
             Direction.Left => _currentPoint.X - _stepSize <= 0,
             _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
         };
@@ -124,10 +125,10 @@ public class MotionControl
     {
         return _currentDirection switch
         {
-            Direction.Up => _map[_currentPoint.Y - _stepSize, _currentPoint.X] == (int)Figures.Barrier,
-            Direction.Down => _map[_currentPoint.Y + _stepSize, _currentPoint.X] == (int)Figures.Barrier,
-            Direction.Right => _map[_currentPoint.Y, _currentPoint.X + _stepSize] == (int)Figures.Barrier,
-            Direction.Left => _map[_currentPoint.Y, _currentPoint.X - _stepSize] == (int)Figures.Barrier,
+            Direction.Up => _map[_currentPoint.Y - _stepSize][_currentPoint.X] == (int)Figures.Barrier,
+            Direction.Down => _map[_currentPoint.Y + _stepSize][_currentPoint.X] == (int)Figures.Barrier,
+            Direction.Right => _map[_currentPoint.Y][_currentPoint.X + _stepSize] == (int)Figures.Barrier,
+            Direction.Left => _map[_currentPoint.Y][_currentPoint.X - _stepSize] == (int)Figures.Barrier,
             _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
         };
     }

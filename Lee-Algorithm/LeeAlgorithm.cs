@@ -36,30 +36,30 @@ public class LeeAlgorithm : IPathFinder
     {
         if (startX > Width || startX < 0)
         {
-            throw new ArgumentException("Неправильная координата x");
+            throw new ArgumentException($"Incorrect start coordinate x = {startX}");
         }
         if (startY > Height || startY < 0)
         {
-            throw new ArgumentException("Неправильная координата y");
+            throw new ArgumentException($"Incorrect start coordinate y = {startY}");
         }
         _step = 0;
         ListGraph[startX][startY] = _step;
     }
 
-    private void SetDestinationCell(int startX, int startY)
+    private void SetDestinationCell(int destinationX, int destinationY)
     {
-        if (startX > Width || startX < 0)
+        if (destinationX > Width || destinationX < 0)
         {
-            throw new ArgumentException("Неправильная координата x");
+            throw new ArgumentException($"Incorrect start coordinate x = {destinationX}");
         }
-        if (startY > Height || startY < 0)
+        if (destinationY > Height || destinationY < 0)
         {
-            throw new ArgumentException("Неправильная координата y");
+            throw new ArgumentException($"Incorrect start coordinate y = {destinationY}");
         }
-        ListGraph[startX][startY] = (int)Figures.Destination;
+        ListGraph[destinationX][destinationY] = (int)Figures.Destination;
     }
 
-    public bool PathSearch()
+    private bool PathSearch()
     {
         if (WavePropagation())
         {

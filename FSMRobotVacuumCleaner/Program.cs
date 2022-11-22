@@ -11,22 +11,27 @@ namespace FSMRobotVacuumCleaner
         public static void Main(string[] args)
         {
             var rand = new Random();
-            const int heigth = 6;
+            const int height = 6;
             const int width = 6;
-            var my = new int[heigth, width];
-            for (var i = 0; i < heigth; i++)
+            var map = new int[height][];
+            for (var i = 0; i < height; i++)
+            {
+                map[i] = new int[width];
+            }
+                
+            for (var i = 0; i < height; i++)
             {
                 for (var j = 0; j < width; j++)
                 {
                     if (rand.Next(100) > 70)
-                        my[i, j] = (int)Figures.Barrier;
+                        map[i][j] = (int)Figures.Barrier;
                     else
-                        my[i, j] = (int)Figures.EmptySpace;
+                        map[i][j] = (int)Figures.EmptySpace;
                 }
             }
 
             var timeout = new TimeSpan(0, 0, 60);
-            var motion = new MotionControl(my, timeout, new Point(0, 3), Direction.Down, 1);
+            var motion = new MotionControl(map.Select(x => x.ToList()).ToList(), timeout, new Point(0, 3), Direction.Down, 1);
             var battery = new Battery(80, 100);
             var dustCollector = new DustCollector(0, 100);
             var robot = new RobotVacuumCleaner(battery, dustCollector, motion);
@@ -34,18 +39,18 @@ namespace FSMRobotVacuumCleaner
             while (true)
             {
                 Console.WriteLine(motion.GetCurrentPoint());
-                Print(my, robot.GetCurrentPoint());
+                Print(map.Select(x => x.ToList()).ToList(), robot.GetCurrentPoint());
                 robot.Update();
                 Thread.Sleep(1000);
             }
         }
 
-        private static void Print(int[,] array, Point currentPosition)
+        private static void Print(List<List<int>> array, Point currentPosition)
         {
             Console.WriteLine("***");
             var msg = string.Empty;
-            var x = array.GetLength(0);
-            var y = array.GetLength(1);
+            var x = array.First().Count;
+            var y = array.Count;
             for (var i = 0; i < x; i++)
             {
                 for (var j = 0; j < y; j++)
@@ -57,7 +62,7 @@ namespace FSMRobotVacuumCleaner
                     }
                     else
                     {
-                        switch (array[i, j])
+                        switch (array[i][j])
                         {
                             case (int)Figures.Path:
                                 msg = string.Format("{0,3}", "+");
@@ -80,7 +85,7 @@ namespace FSMRobotVacuumCleaner
                                 Console.ForegroundColor = ConsoleColor.Blue;
                                 break;
                             default:
-                                msg = string.Format("{0,3}", array[i, j]);
+                                msg = string.Format("{0,3}", array[i][j]);
                                 Console.ForegroundColor = ConsoleColor.DarkGray;
                                 break;
                         }
