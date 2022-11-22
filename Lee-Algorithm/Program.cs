@@ -1,47 +1,61 @@
-﻿namespace Lee_Algorithm
+﻿using System.Drawing;
+
+namespace Lee_Algorithm
 {
     public static class Program
     {
         static void Main(string[] args)
         {
             var rand = new Random();
-            const int heigth = 20;
+            const int height = 20;
             const int width = 36;
             while (true)
             {
-                var my = new int[heigth, width];
-                for (var i = 0; i < heigth; i++)
+                var map = new int[height][];
+                for (var i = 0; i < height; i++)
+                {
+                    map[i] = new int[width];
+                }
+                
+                for (var i = 0; i < height; i++)
                 {
                     for (var j = 0; j < width; j++)
                     {
                         if (rand.Next(100) > 70)
-                            my[i, j] = (int)Figures.Barrier;
+                            map[i][j] = (int)Figures.Barrier;
                         else
-                            my[i, j] = (int)Figures.EmptySpace;
+                            map[i][j] = (int)Figures.EmptySpace;
                     }
                 }
 
-                var random = new Random(unchecked((int)DateTime.Now.Millisecond));
-                my[random.Next(heigth), random.Next(width)] = (int)Figures.StartPosition;
-                my[random.Next(heigth), random.Next(width)] = (int)Figures.Destination;
-                Print(my);
+                var random = new Random(DateTime.Now.Millisecond);
+                var startPoint = new Point(random.Next(height), random.Next(width));
+                var destinationPoint = new Point(random.Next(height), random.Next(width));
+                map[startPoint.X][startPoint.Y] = (int)Figures.StartPosition;
+                map[destinationPoint.X][destinationPoint.Y] = (int)Figures.Destination;
+                Print(map.Select(x => x.ToList()).ToList());
 
-                var li = new LeeAlgorithm(my);
-                Console.WriteLine(li.PathFound);
-                if (li.PathFound)
+                var leeAlgorithm = new LeeAlgorithm();
+                var path = 
+                    leeAlgorithm.GetPath(map.Select(x => x.ToList()).ToList(), startPoint, destinationPoint);
+                
+                Console.WriteLine(leeAlgorithm.PathFound);
+                Console.WriteLine($"startPoint {startPoint}");
+                Console.WriteLine($"destinationPoint {destinationPoint}");
+                if (leeAlgorithm.PathFound)
                 {
-                    foreach (var item in li.Path)
+                    foreach (var item in leeAlgorithm.Path)
                     {
-                        if (item == li.Path.Last())
-                            my[item.Item1, item.Item2] = (int)Figures.StartPosition;
-                        else if (item == li.Path.First())
-                            my[item.Item1, item.Item2] = (int)Figures.Destination;
+                        if (Equals(item, leeAlgorithm.Path.Last()))
+                            map[item.Item1][item.Item2] = (int)Figures.StartPosition;
+                        else if (Equals(item, leeAlgorithm.Path.First()))
+                            map[item.Item1][item.Item2] = (int)Figures.Destination;
                         else
-                            my[item.Item1, item.Item2] = (int)Figures.Path;
+                            map[item.Item1][item.Item2] = (int)Figures.Path;
                     }
 
-                    Print(li.ArrayGraph);
-                    Console.WriteLine("Length " + li.LengthPath);
+                    Print(map.Select(x => x.ToList()).ToList());
+                    Console.WriteLine("Length " + leeAlgorithm.LengthPath);
                 }
                 else
                     Console.WriteLine("Path not found");
@@ -50,17 +64,17 @@
             }
         }
 
-        private static void Print(int[,] array)
+        private static void Print(List<List<int>> array)
         {
             Console.WriteLine("***");
             var msg = string.Empty;
-            var x = array.GetLength(0);
-            var y = array.GetLength(1);
-            for (var i = 0; i < x; i++)
+            var x = array.First().Count;
+            var y = array.Count;
+            for (var i = 0; i < y; i++)
             {
-                for (var j = 0; j < y; j++)
+                for (var j = 0; j < x; j++)
                 {
-                    switch (array[i, j])
+                    switch (array[i][j])
                     {
                         case (int)Figures.Path:
                             msg = string.Format("{0,3}", "+");
@@ -82,30 +96,9 @@
                             msg = string.Format("{0,3}", "*");
                             Console.ForegroundColor = ConsoleColor.Blue;
                             break;
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 5:
-                        case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                        case 10:
-                        case 11:
-                        case 12:
-                        case 13:
-                        case 14:
-                        case 15:
-                        case 16:
-                        case 17:
-                        case 18:
-                        case 19:
-                        case 20:
-                            msg = string.Format("{0,3}", array[i, j]);
-                            Console.ForegroundColor = ConsoleColor.DarkGray;
-                            break;
                         default:
+                            msg = string.Format("{0,3}", array[i][j]);
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
                             break;
                     }
 

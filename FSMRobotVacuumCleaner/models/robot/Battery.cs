@@ -10,16 +10,18 @@ public class Battery
         _currentChargeLevel = currentChargeLevel;
         _maxChargeLevel = maxChargeLevel;
     }
-
-    public bool IsDischarged() => _currentChargeLevel == 0;
     
-    public bool IsFullyCharged() => _currentChargeLevel == _maxChargeLevel;
+    public bool IsDischarged() => _currentChargeLevel < _maxChargeLevel;
+
+    public bool IsFullDischarged() => _currentChargeLevel == 0;
+    
+    public bool IsFullCharged() => _currentChargeLevel == _maxChargeLevel;
 
     public int GetCurrentChargeLevel() => _currentChargeLevel;
 
     public void Discharge(int expenditure)
     {
-        if (IsDischarged())
+        if (IsFullDischarged())
         {
             throw new InvalidOperationException("The battery is low");
         }
@@ -31,7 +33,7 @@ public class Battery
 
     public void Charging(int number)
     {
-        if (!IsFullyCharged())
+        if (!IsFullCharged())
         {
             _currentChargeLevel += number;
         }

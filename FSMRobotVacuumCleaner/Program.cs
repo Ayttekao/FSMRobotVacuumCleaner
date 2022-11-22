@@ -26,40 +26,72 @@ namespace FSMRobotVacuumCleaner
             }
 
             var timeout = new TimeSpan(0, 0, 60);
-
-            var motion = new MotionControl(my, timeout, new Point(0, 0), Direction.Down, 1);
-            var battery = new Battery(0, 30);
-            var dustCollector = new DustCollector(0, 5);
+            var motion = new MotionControl(my, timeout, new Point(0, 3), Direction.Down, 1);
+            var battery = new Battery(80, 100);
+            var dustCollector = new DustCollector(0, 100);
             var robot = new RobotVacuumCleaner(battery, dustCollector, motion);
+            
             while (true)
             {
                 Console.WriteLine(motion.GetCurrentPoint());
-                PrintMotion(my, robot.GetCurrentPoint());
+                Print(my, robot.GetCurrentPoint());
                 robot.Update();
                 Thread.Sleep(1000);
             }
         }
 
-        public static void PrintMotion(int[,] matrix, Point currentPosition)
+        private static void Print(int[,] array, Point currentPosition)
         {
-            for (int i = 0; i < matrix.GetLength(0); i++)
+            Console.WriteLine("***");
+            var msg = string.Empty;
+            var x = array.GetLength(0);
+            var y = array.GetLength(1);
+            for (var i = 0; i < x; i++)
             {
-                for (int j = 0; j < matrix.GetLength(1); j++)
+                for (var j = 0; j < y; j++)
                 {
                     if (i == currentPosition.Y && j == currentPosition.X)
                     {
-                        Console.Write(string.Format("*  "));
+                        msg = string.Format("{0,3}", "o");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                     else
                     {
-                        Console.Write(string.Format("{0}  ", matrix[i, j]));
+                        switch (array[i, j])
+                        {
+                            case (int)Figures.Path:
+                                msg = string.Format("{0,3}", "+");
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                break;
+                            case (int)Figures.StartPosition:
+                                msg = string.Format("{0,3}", "s");
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                break;
+                            case (int)Figures.Destination:
+                                msg = string.Format("{0,3}", "d");
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                break;
+                            case (int)Figures.EmptySpace:
+                                msg = string.Format("{0,3}", "'");
+                                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                                break;
+                            case (int)Figures.Barrier:
+                                msg = string.Format("{0,3}", "*");
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                                break;
+                            default:
+                                msg = string.Format("{0,3}", array[i, j]);
+                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                                break;
+                        }
                     }
+
+                    Console.Write(msg);
+                    Console.ResetColor();
                 }
 
-                Console.Write(Environment.NewLine);
+                Console.WriteLine();
             }
-
-            Console.Write(Environment.NewLine + "*********" + Environment.NewLine);
         }
     }
 }

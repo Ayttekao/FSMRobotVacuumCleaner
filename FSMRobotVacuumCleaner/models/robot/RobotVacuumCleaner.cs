@@ -43,7 +43,7 @@ public class RobotVacuumCleaner
     {
         const int AmountChargeReceived = 5;
 
-        if (_battery.IsFullyCharged())
+        if (_battery.IsFullCharged())
         {
             _brain.PopState();
             _brain.PushState(Cleaning);
