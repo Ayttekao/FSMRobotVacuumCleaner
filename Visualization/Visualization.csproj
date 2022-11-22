@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net5.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="resources" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="WinFormAnimation-NET5" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Demo2.cs">
+        <SubType>UserControl</SubType>
+      </Compile>
+    </ItemGroup>
+
+</Project>
