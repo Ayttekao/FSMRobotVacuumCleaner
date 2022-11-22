@@ -1,4 +1,5 @@
-﻿using FSMRobotVacuumCleaner.algo;
+﻿using System.Drawing;
+using FSMRobotVacuumCleaner.algo;
 
 namespace FSMRobotVacuumCleaner.models.robot;
 
@@ -7,15 +8,15 @@ public class RobotVacuumCleaner
     private FinaleStateMachine _brain;
     private Battery _battery;
     private DustCollector _dustCollector;
-    private MotionController _motionController;
+    private MotionControl _motionControl;
 
-    public RobotVacuumCleaner(Battery battery, DustCollector dustCollector, MotionController motionController)
+    public RobotVacuumCleaner(Battery battery, DustCollector dustCollector, MotionControl motionControl)
     {
         _brain = new FinaleStateMachine();
         _brain.PushState(CheckSystems);
         _battery = battery;
         _dustCollector = dustCollector;
-        _motionController = motionController;
+        _motionControl = motionControl;
     }
 
     public void Update()
@@ -23,6 +24,8 @@ public class RobotVacuumCleaner
         _brain.Update();
         Console.WriteLine(_brain.GetStateName());
     }
+
+    public Point GetCurrentPoint() => _motionControl.GetCurrentPoint();
 
     private void CheckSystems()
     {
@@ -66,11 +69,13 @@ public class RobotVacuumCleaner
         {
             _battery.Discharge(5);
             _dustCollector.Fill(5);
+            _brain.PushState(Move);
         }
     }
 
     private void Move()
     {
-        
+        _motionControl.Move();
+        _brain.PopState();
     }
 }

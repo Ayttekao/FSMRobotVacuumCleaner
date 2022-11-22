@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
+using FSMRobotVacuumCleaner.models.motion;
 using Lee_Algorithm;
 
 namespace FSMRobotVacuumCleaner.algo;
 
-public class MotionController
+public class MotionControl
 {
     private int[,] _map;
     private TimeSpan _actionTimeout;
@@ -13,7 +14,7 @@ public class MotionController
     private Direction _currentDirection;
     private int _stepSize;
 
-    public MotionController(int[,] map, TimeSpan actionTimeout, Point currentPoint, Direction currentDirection, int stepSize)
+    public MotionControl(int[,] map, TimeSpan actionTimeout, Point currentPoint, Direction currentDirection, int stepSize)
     {
         _map = map;
         _actionTimeout = actionTimeout;
@@ -24,7 +25,7 @@ public class MotionController
         _stepSize = stepSize;
     }
 
-    public Point GetCurrentPosition() => _currentPoint;
+    public Point GetCurrentPoint() => _currentPoint;
 
     public void Move()
     {

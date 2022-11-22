@@ -43,34 +43,13 @@ public class LeeAlgorithm
         ArrayGraph = array;
         Width = ArrayGraph.GetLength(0);
         Heidth = ArrayGraph.GetLength(1);
-        int startX;
-        int startY;
-        FindStartCell(out startX, out startY);
-        SetStarCell(startX, startY);
-        PathFound = PathSearch();
+        // int startX;
+        // int startY;
+        // FindStartCell(out startX, out startY);
+        // SetStarCell(startX, startY);
+        // PathFound = PathSearch();
     }
-
-    private void FindStartCell(out int startX, out int startY)
-    {
-        var w = Width;
-        var h = Heidth;
-
-        for (var i = 0; i < w; i++)
-        {
-            for (var j = 0; j < h; j++)
-            {
-                if (ArrayGraph[i, j] == (int)Figures.StartPosition)
-                {
-                    startX = i;
-                    startY = j;
-                    return;
-                }
-            }
-        }
-
-        throw new AggregateException("Нет начальной точки");
-    }
-
+    
     public void SetStarCell(int startX, int startY)
     {
         if (startX > ArrayGraph.GetLength(0) || startX < 0)
@@ -113,6 +92,27 @@ public class LeeAlgorithm
 
     // Есть. Ортогональный путь
     // Todo. Ортогонально-диагональный путь
+
+    private void FindStartCell(out int startX, out int startY)
+    {
+        var w = Width;
+        var h = Heidth;
+
+        for (var i = 0; i < w; i++)
+        {
+            for (var j = 0; j < h; j++)
+            {
+                if (ArrayGraph[i, j] == (int)Figures.StartPosition)
+                {
+                    startX = i;
+                    startY = j;
+                    return;
+                }
+            }
+        }
+
+        throw new AggregateException("Нет начальной точки");
+    }
 
     /// <summary>
     /// Распространение волны
