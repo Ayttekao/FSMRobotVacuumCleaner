@@ -11,13 +11,17 @@ public class DustCollector
         _capacity = capacity;
     }
 
-    public bool IsFull() => _capacity == _currentOccupancy;
+    public bool IsFull() => _capacity <= _currentOccupancy;
 
     public void Fill(int amountOfDust)
     {
         if (IsFull())
         {
             throw new OverflowException("Dust collector is full");
+        }
+        else
+        {
+            _currentOccupancy += amountOfDust;
         }
     }
 
