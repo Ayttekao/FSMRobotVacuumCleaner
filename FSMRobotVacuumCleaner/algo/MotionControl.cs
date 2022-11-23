@@ -28,11 +28,29 @@ public class MotionControl
 
     public Point GetCurrentPoint() => _currentPoint;
 
+    public List<List<int>> GetMap() => _map;
+
+    public void MoveToPoint(Point destination)
+    {
+        TurnByMovingDirection(destination);
+        _currentPoint = destination;
+    }
+
     public void Move()
     {
         if (IsEndMap() || IsObstacleForward())
         {
-            UpdateTimer();
+            Detour();
+        }
+        else
+        {
+            MoveForward();
+        }
+    }
+
+    private void Detour()
+    {
+        UpdateTimer();
             if (_actionStart > _actionEnd)
             {
                 TurnRight();
@@ -42,11 +60,6 @@ public class MotionControl
             {
                 TurnLeft();
             }
-        }
-        else
-        {
-            MoveForward();
-        }
     }
 
     private void UpdateTimer()
@@ -62,6 +75,26 @@ public class MotionControl
     private void ResetTimer()
     {
         _actionEnd = TimeOnly.MinValue;
+    }
+
+    private void TurnByMovingDirection(Point destination)
+    {
+        if (_currentPoint.X > destination.X)
+        {
+            _currentDirection = Direction.Left;
+        }
+        else if (_currentPoint.X < destination.X)
+        {
+            _currentDirection = Direction.Right;
+        }
+        else if (_currentPoint.Y > destination.Y)
+        {
+            _currentDirection = Direction.Down;
+        }
+        else
+        {
+            _currentDirection = Direction.Down;
+        }
     }
 
     private void TurnLeft()
@@ -113,10 +146,10 @@ public class MotionControl
     {
         return _currentDirection switch
         {
-            Direction.Up => _currentPoint.Y - _stepSize <= 0,
-            Direction.Down => _currentPoint.Y + _stepSize >= _map.Count,
-            Direction.Right => _currentPoint.X + _stepSize >= _map.First().Count,
-            Direction.Left => _currentPoint.X - _stepSize <= 0,
+            Direction.Up => _currentPoint.Y - _stepSize < 0,
+            Direction.Down => _currentPoint.Y + _stepSize > _map.Count - 1,
+            Direction.Right => _currentPoint.X + _stepSize > _map.First().Count - 1,
+            Direction.Left => _currentPoint.X - _stepSize < 0,
             _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
         };
     }

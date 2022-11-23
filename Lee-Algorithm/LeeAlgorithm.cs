@@ -27,6 +27,7 @@ public class LeeAlgorithm : IPathFinder
         SetStarCell(startPoint.X, startPoint.Y);
         SetDestinationCell(destination.X, destination.Y);
         PathFound = PathSearch();
+        _finishingCellMarked = false;
         return Path;
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using FSMRobotVacuumCleaner.algo;
+using Lee_Algorithm;
 
 namespace FSMRobotVacuumCleaner.models.robot;
 
@@ -9,6 +10,8 @@ public class RobotVacuumCleaner
     private Battery _battery;
     private DustCollector _dustCollector;
     private MotionControl _motionControl;
+    private Navigator _navigator;
+    private Point _basePoint;
 
     public RobotVacuumCleaner(Battery battery, DustCollector dustCollector, MotionControl motionControl)
     {
@@ -17,6 +20,8 @@ public class RobotVacuumCleaner
         _battery = battery;
         _dustCollector = dustCollector;
         _motionControl = motionControl;
+        _navigator = new Navigator(motionControl.GetMap(), new LeeAlgorithm());
+        _basePoint = motionControl.GetCurrentPoint();
     }
 
     public void Update()
@@ -46,7 +51,6 @@ public class RobotVacuumCleaner
         if (_battery.IsFullCharged())
         {
             _brain.PopState();
-            _brain.PushState(Cleaning);
         }
         else
         {
@@ -61,7 +65,10 @@ public class RobotVacuumCleaner
         {
             Console.WriteLine("Low battery");
             _brain.PopState();
+            _brain.PushState(MoveBack);
+            _brain.PushState(Charging);
             _brain.PushState(MoveHome);
+            _brain.PushState(CretePathToHome);
         }
         else if (_dustCollector.IsFull())
         {
@@ -70,14 +77,41 @@ public class RobotVacuumCleaner
         else
         {
             _battery.Discharge(5);
-            _dustCollector.Fill(5);
+            _dustCollector.Fill(0);
             _brain.PushState(Move);
         }
     }
 
+    private void CretePathToHome()
+    {
+        _navigator.CreatePath(_motionControl.GetCurrentPoint(), _basePoint);
+        _brain.PopState();
+    }
+
     private void MoveHome()
     {
-        
+        if (_navigator.IsDestinationPoint())
+        {
+            _brain.PopState();
+        }
+        else
+        {
+            var destinationWaypoint = _navigator.GetDestinationWaypoint();
+            _motionControl.MoveToPoint(destinationWaypoint);   
+        }
+    }
+
+    private void MoveBack()
+    {
+        if (_navigator.IsStartPoint())
+        {
+            _brain.PopState();
+        }
+        else
+        {
+            var startWaypoint = _navigator.GetStartWaypoint();
+            _motionControl.MoveToPoint(startWaypoint);
+        }
     }
 
     private void Move()

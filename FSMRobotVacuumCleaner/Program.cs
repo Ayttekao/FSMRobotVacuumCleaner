@@ -30,22 +30,23 @@ namespace FSMRobotVacuumCleaner
                 }
             }
 
+            var startPoint = new Point(0, 3);
             var timeout = new TimeSpan(0, 0, 60);
-            var motion = new MotionControl(map.Select(x => x.ToList()).ToList(), timeout, new Point(0, 3), Direction.Down, 1);
-            var battery = new Battery(80, 100);
+            var motion = new MotionControl(map.Select(x => x.ToList()).ToList(), timeout, startPoint, Direction.Down, 1);
+            var battery = new Battery(80, 20);
             var dustCollector = new DustCollector(0, 100);
             var robot = new RobotVacuumCleaner(battery, dustCollector, motion);
             
             while (true)
             {
                 Console.WriteLine(motion.GetCurrentPoint());
-                Print(map.Select(x => x.ToList()).ToList(), robot.GetCurrentPoint());
+                Print(map.Select(x => x.ToList()).ToList(), robot.GetCurrentPoint(), startPoint);
                 robot.Update();
                 Thread.Sleep(1000);
             }
         }
 
-        private static void Print(List<List<int>> array, Point currentPosition)
+        private static void Print(List<List<int>> array, Point currentPosition, Point startPoint)
         {
             Console.WriteLine("***");
             var msg = string.Empty;
@@ -59,6 +60,11 @@ namespace FSMRobotVacuumCleaner
                     {
                         msg = string.Format("{0,3}", "o");
                         Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else if (i == startPoint.Y && j == startPoint.X)
+                    {
+                        msg = string.Format("{0,3}", "U");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                     }
                     else
                     {

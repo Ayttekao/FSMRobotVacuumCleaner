@@ -12,7 +12,7 @@ public class FinaleStateMachine
 
     public Action PopState() => _stack.Pop();
 
-    public string GetStateName() => $"{GetCurrentState().Method.Name}";
+    public string GetStateName() => $"{GetCurrentState().Method.Name}, Stack size = {_stack.Count}";
 
     public void PushState(Action state)
     {
