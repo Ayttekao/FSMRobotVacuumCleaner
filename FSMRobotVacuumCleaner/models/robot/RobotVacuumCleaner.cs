@@ -20,7 +20,7 @@ public class RobotVacuumCleaner
         _battery = battery;
         _dustCollector = dustCollector;
         _motionControl = motionControl;
-        _navigator = new Navigator(motionControl.GetMap(), new LeeAlgorithm());
+        _navigator = new Navigator(motionControl.GetMap());
         _basePoint = motionControl.GetCurrentPoint();
     }
 

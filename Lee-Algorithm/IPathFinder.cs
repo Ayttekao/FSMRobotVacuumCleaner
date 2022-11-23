@@ -4,5 +4,5 @@ namespace Lee_Algorithm;
 
 public interface IPathFinder
 {
-    public List<Tuple<int, int>> GetPath(List<List<int>> map, Point startPoint, Point destination);
+    public List<Tuple<int, int>> GetPath(Point startPoint, Point destination);
 }

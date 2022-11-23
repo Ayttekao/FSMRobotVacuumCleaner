@@ -4,121 +4,115 @@ namespace Lee_Algorithm;
 
 public class LeeAlgorithm : IPathFinder
 {
-    private List<List<int>> ListGraph { get; set; }
-
-    public List<Tuple<int, int>> Path { get; private set; }
-
-    private int Width { get; set; }
-    private int Height { get; set; }
-    public bool PathFound { get; private set; }
-
-    public int LengthPath => Path.Count;
-
+    private List<List<int>> ListGraph { get; }
+    private int Width { get; }
+    private int Height { get; }
     private int _step;
-    private bool _finishingCellMarked;
     private int _finishPointI;
     private int _finishPointJ;
-    
-    public List<Tuple<int, int>> GetPath(List<List<int>> map, Point startPoint, Point destination)
+
+    public List<Tuple<int, int>> GetPath(Point startPoint, Point destination)
+    {
+        var localMap = ListGraph.Select(x => new List<int>(x)).ToList();
+        localMap = GetMapWithStarCell(localMap, startPoint.X, startPoint.Y);
+        localMap = GetMapWithDestinationCell(localMap, destination.X, destination.Y);
+        return GetPath(localMap);
+    }
+
+    public LeeAlgorithm(List<List<int>> map)
     {
         ListGraph = map;
         Width = ListGraph.Count;
         Height = ListGraph.First().Count;
-        SetStarCell(startPoint.X, startPoint.Y);
-        SetDestinationCell(destination.X, destination.Y);
-        PathFound = PathSearch();
-        _finishingCellMarked = false;
-        return Path;
     }
 
-    public LeeAlgorithm() { }
-
-    private void SetStarCell(int startX, int startY)
+    private List<List<int>> GetMapWithStarCell(List<List<int>> map, int startX, int startY)
     {
         if (startX > Width || startX < 0)
         {
             throw new ArgumentException($"Incorrect start coordinate x = {startX}");
         }
+
         if (startY > Height || startY < 0)
         {
             throw new ArgumentException($"Incorrect start coordinate y = {startY}");
         }
+
         _step = 0;
-        ListGraph[startX][startY] = _step;
+        map[startX][startY] = _step;
+
+        return map;
     }
 
-    private void SetDestinationCell(int destinationX, int destinationY)
+    private List<List<int>> GetMapWithDestinationCell(List<List<int>> map, int destinationX, int destinationY)
     {
         if (destinationX > Width || destinationX < 0)
         {
             throw new ArgumentException($"Incorrect start coordinate x = {destinationX}");
         }
+
         if (destinationY > Height || destinationY < 0)
         {
             throw new ArgumentException($"Incorrect start coordinate y = {destinationY}");
         }
-        ListGraph[destinationX][destinationY] = (int)Figures.Destination;
+
+        map[destinationX][destinationY] = (int)Figures.Destination;
+        return map;
     }
 
-    private bool PathSearch()
+    private List<Tuple<int, int>> GetPath(List<List<int>> map)
     {
-        if (WavePropagation())
-        {
-            if (RestorePath())
-            {
-                return true;
-            }
-        }
-
-        return false;
+        var listWithWavePropagation = GetListWithWavePropagation(map);
+        return GetRestoredPath(listWithWavePropagation);
     }
 
-    private bool WavePropagation()
+    private List<List<int>> GetListWithWavePropagation(List<List<int>> map)
     {
-        var w = Width;
-        var h = Height;
         var finished = false;
-        
+
         do
         {
-            for (var i = 0; i < w; i++)
+            for (var i = 0; i < Width; i++)
             {
-                for (var j = 0; j < h; j++)
+                for (var j = 0; j < Height; j++)
                 {
-                    if (ListGraph[i][j] == _step)
+                    if (map[i][j] == _step)
                     {
-                        if (i != w - 1)
+                        if (i != Width - 1)
                         {
-                            if (ListGraph[i + 1][j] == (int)Figures.EmptySpace)
+                            if (map[i + 1][j] == (int)Figures.EmptySpace)
                             {
-                                ListGraph[i + 1][j] = _step + 1;
-                            }
-                        }
-                        if (j != h - 1)
-                        {
-                            if (ListGraph[i][j + 1] == (int)Figures.EmptySpace)
-                            {
-                                ListGraph[i][j + 1] = _step + 1;
-                            }
-                        }
-                        if (i != 0)
-                        {
-                            if (ListGraph[i - 1][j] == (int)Figures.EmptySpace)
-                            {
-                                ListGraph[i - 1][j] = _step + 1;
-                            }
-                        }
-                        if (j != 0)
-                        {
-                            if (ListGraph[i][j - 1] == (int)Figures.EmptySpace)
-                            {
-                                ListGraph[i][j - 1] = _step + 1;
+                                map[i + 1][j] = _step + 1;
                             }
                         }
 
-                        if (i < w - 1)
+                        if (j != Height - 1)
                         {
-                            if (ListGraph[i + 1][j] == (int)Figures.Destination)
+                            if (map[i][j + 1] == (int)Figures.EmptySpace)
+                            {
+                                map[i][j + 1] = _step + 1;
+                            }
+                        }
+
+                        if (i != 0)
+                        {
+                            if (map[i - 1][j] == (int)Figures.EmptySpace)
+                            {
+                                map[i - 1][j] = _step + 1;
+                            }
+                        }
+
+                        if (j != 0)
+                        {
+                            if (map[i][j - 1] == (int)Figures.EmptySpace)
+                            {
+                                map[i][j - 1] = _step + 1;
+                            }
+                        }
+
+                        if (i < Width - 1)
+                        {
+                            if (map[i + 1][j] == (int)Figures.Destination)
                             {
                                 _finishPointI = i + 1;
                                 _finishPointJ = j;
@@ -126,9 +120,9 @@ public class LeeAlgorithm : IPathFinder
                             }
                         }
 
-                        if (j < h - 1)
+                        if (j < Height - 1)
                         {
-                            if (ListGraph[i][j + 1] == (int)Figures.Destination)
+                            if (map[i][j + 1] == (int)Figures.Destination)
                             {
                                 _finishPointI = i;
                                 _finishPointJ = j + 1;
@@ -138,7 +132,7 @@ public class LeeAlgorithm : IPathFinder
 
                         if (i > 0)
                         {
-                            if (ListGraph[i - 1][j] == (int)Figures.Destination)
+                            if (map[i - 1][j] == (int)Figures.Destination)
                             {
                                 _finishPointI = i - 1;
                                 _finishPointJ = j;
@@ -148,7 +142,7 @@ public class LeeAlgorithm : IPathFinder
 
                         if (j > 0)
                         {
-                            if (ListGraph[i][j - 1] == (int)Figures.Destination)
+                            if (map[i][j - 1] == (int)Figures.Destination)
                             {
                                 _finishPointI = i;
                                 _finishPointJ = j - 1;
@@ -160,68 +154,60 @@ public class LeeAlgorithm : IPathFinder
             }
 
             _step++;
-        } while (!finished && _step < w * h);
+        } while (!finished && _step < Width * Height);
 
-        _finishingCellMarked = finished;
-        return finished;
+        return map;
     }
-    
-    private bool RestorePath()
+
+    private List<Tuple<int, int>> GetRestoredPath(List<List<int>> map)
     {
-        if (!_finishingCellMarked)
+        if (!map.Any())
         {
-            return false;
+            return new List<Tuple<int, int>>();
         }
 
-        var w = Width;
-        var h = Height;
         var i = _finishPointI;
         var j = _finishPointJ;
-        Path = new List<Tuple<int, int>>();
-        AddToPath(i, j);
+        var path = new List<Tuple<int, int>>();
+        path.Add(new Tuple<int, int>(i, j));
 
         do
         {
-            if (i < w - 1)
+            if (i < Width - 1)
             {
-                if (ListGraph[i + 1][j] == _step - 1)
+                if (map[i + 1][j] == _step - 1)
                 {
-                    AddToPath(++i, j);
+                    path.Add(new Tuple<int, int>(++i, j));
                 }
             }
 
-            if (j < h - 1)
+            if (j < Height - 1)
             {
-                if (ListGraph[i][j + 1] == _step - 1)
+                if (map[i][j + 1] == _step - 1)
                 {
-                    AddToPath(i, ++j);
+                    path.Add(new Tuple<int, int>(i, ++j));
                 }
             }
 
             if (i > 0)
             {
-                if (ListGraph[i - 1][j] == _step - 1)
+                if (map[i - 1][j] == _step - 1)
                 {
-                    AddToPath(--i, j);
+                    path.Add(new Tuple<int, int>(--i, j));
                 }
             }
 
             if (j > 0)
             {
-                if (ListGraph[i][j - 1] == _step - 1)
+                if (map[i][j - 1] == _step - 1)
                 {
-                    AddToPath(i, --j);
+                    path.Add(new Tuple<int, int>(i, --j));
                 }
             }
 
             _step--;
         } while (_step != 0);
 
-        return true;
-    }
-
-    private void AddToPath(int x, int y)
-    {
-        Path.Add(new Tuple<int, int>(x, y));
+        return path;
     }
 }

@@ -5,15 +5,13 @@ namespace FSMRobotVacuumCleaner.algo;
 
 public class Navigator
 {
-    private List<List<int>> _map;
     private IPathFinder _pathFinder;
     private Stack<Tuple<int, int>> _pathToDestinationPoint;
     private Stack<Tuple<int, int>> _pathToStartPoint;
 
-    public Navigator(List<List<int>> map, IPathFinder pathFinder)
+    public Navigator(List<List<int>> map)
     {
-        _map = map;
-        _pathFinder = pathFinder;
+        _pathFinder = new LeeAlgorithm(map);
     }
 
     public bool IsStartPoint() => !_pathToStartPoint.Any();
@@ -46,10 +44,10 @@ public class Navigator
 
     public void CreatePath(Point startPoint, Point destinationPoint)
     {
-        var path = _pathFinder.GetPath(_map, Swap(startPoint), Swap(destinationPoint));
+        var path = _pathFinder.GetPath(Swap(startPoint), Swap(destinationPoint));
         _pathToStartPoint = new Stack<Tuple<int, int>>(path.ToArray().Reverse());
         _pathToDestinationPoint = new Stack<Tuple<int, int>>(path);
     }
 
-    private Point Swap(Point point) => new Point(point.Y, point.X);
+    private Point Swap(Point point) => new(point.Y, point.X);
 }
