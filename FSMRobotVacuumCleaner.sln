@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSMRobotVacuumCleaner", "FSMRobotVacuumCleaner\FSMRobotVacuumCleaner.csproj", "{0A4F8370-2A5C-4629-90FA-BC57A2358E10}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lee-Algorithm", "Lee-Algorithm\Lee-Algorithm.csproj", "{391A1448-801B-4A46-BC14-1F7D0855A988}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualization", "Visualization\Visualization.csproj", "{D2E3D2D8-FDB4-4061-8906-680F663A89A9}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{0A4F8370-2A5C-4629-90FA-BC57A2358E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A4F8370-2A5C-4629-90FA-BC57A2358E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A4F8370-2A5C-4629-90FA-BC57A2358E10}.Release|Any CPU.Build.0 = Release|Any CPU
-		{391A1448-801B-4A46-BC14-1F7D0855A988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{391A1448-801B-4A46-BC14-1F7D0855A988}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{391A1448-801B-4A46-BC14-1F7D0855A988}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{391A1448-801B-4A46-BC14-1F7D0855A988}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D2E3D2D8-FDB4-4061-8906-680F663A89A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D2E3D2D8-FDB4-4061-8906-680F663A89A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2E3D2D8-FDB4-4061-8906-680F663A89A9}.Release|Any CPU.ActiveCfg = Release|Any CPU

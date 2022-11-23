@@ -1,8 +1,9 @@
 ﻿using System.Drawing;
 using FSMRobotVacuumCleaner.algo;
+using FSMRobotVacuumCleaner.models;
+using FSMRobotVacuumCleaner.models.map;
 using FSMRobotVacuumCleaner.models.motion;
 using FSMRobotVacuumCleaner.models.robot;
-using Lee_Algorithm;
 
 namespace FSMRobotVacuumCleaner
 {
@@ -23,10 +24,10 @@ namespace FSMRobotVacuumCleaner
             {
                 for (var j = 0; j < width; j++)
                 {
-                    if (rand.Next(100) > 70)
-                        map[i][j] = (int)Figures.Barrier;
+                    if (rand.Next(100) > 80)
+                        map[i][j] = (int)PointType.Barrier;
                     else
-                        map[i][j] = (int)Figures.EmptySpace;
+                        map[i][j] = (int)PointType.EmptySpace;
                 }
             }
 
@@ -70,23 +71,23 @@ namespace FSMRobotVacuumCleaner
                     {
                         switch (array[i][j])
                         {
-                            case (int)Figures.Path:
+                            case (int)PointType.Path:
                                 msg = string.Format("{0,3}", "+");
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 break;
-                            case (int)Figures.StartPosition:
+                            case (int)PointType.StartPosition:
                                 msg = string.Format("{0,3}", "s");
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 break;
-                            case (int)Figures.Destination:
+                            case (int)PointType.Destination:
                                 msg = string.Format("{0,3}", "d");
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 break;
-                            case (int)Figures.EmptySpace:
+                            case (int)PointType.EmptySpace:
                                 msg = string.Format("{0,3}", "'");
                                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                                 break;
-                            case (int)Figures.Barrier:
+                            case (int)PointType.Barrier:
                                 msg = string.Format("{0,3}", "*");
                                 Console.ForegroundColor = ConsoleColor.Blue;
                                 break;

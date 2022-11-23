@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using Lee_Algorithm;
+using FSMRobotVacuumCleaner.algo;
 
-namespace FSMRobotVacuumCleaner.algo;
+namespace FSMRobotVacuumCleaner.models.motion;
 
 public class Navigator
 {

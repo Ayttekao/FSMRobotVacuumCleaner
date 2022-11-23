@@ -1,8 +1,7 @@
 ﻿using System.Drawing;
-using FSMRobotVacuumCleaner.models.motion;
-using Lee_Algorithm;
+using FSMRobotVacuumCleaner.models.map;
 
-namespace FSMRobotVacuumCleaner.algo;
+namespace FSMRobotVacuumCleaner.models.motion;
 
 public class MotionControl
 {
@@ -158,10 +157,10 @@ public class MotionControl
     {
         return _currentDirection switch
         {
-            Direction.Up => _map[_currentPoint.Y - _stepSize][_currentPoint.X] == (int)Figures.Barrier,
-            Direction.Down => _map[_currentPoint.Y + _stepSize][_currentPoint.X] == (int)Figures.Barrier,
-            Direction.Right => _map[_currentPoint.Y][_currentPoint.X + _stepSize] == (int)Figures.Barrier,
-            Direction.Left => _map[_currentPoint.Y][_currentPoint.X - _stepSize] == (int)Figures.Barrier,
+            Direction.Up => _map[_currentPoint.Y - _stepSize][_currentPoint.X] == (int)PointType.Barrier,
+            Direction.Down => _map[_currentPoint.Y + _stepSize][_currentPoint.X] == (int)PointType.Barrier,
+            Direction.Right => _map[_currentPoint.Y][_currentPoint.X + _stepSize] == (int)PointType.Barrier,
+            Direction.Left => _map[_currentPoint.Y][_currentPoint.X - _stepSize] == (int)PointType.Barrier,
             _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
         };
     }

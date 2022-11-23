@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Lee_Algorithm;
+namespace FSMRobotVacuumCleaner.algo;
 
 public interface IPathFinder
 {

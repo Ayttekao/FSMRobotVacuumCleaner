@@ -1,6 +1,6 @@
-﻿namespace Lee_Algorithm;
+﻿namespace FSMRobotVacuumCleaner.models.map;
 
-public enum Figures
+public enum PointType
 {
     StartPosition = 0,
     EmptySpace = -1,

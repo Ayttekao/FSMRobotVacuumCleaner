@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using FSMRobotVacuumCleaner.algo;
-using Lee_Algorithm;
+using FSMRobotVacuumCleaner.models.motion;
 
 namespace FSMRobotVacuumCleaner.models.robot;
 
@@ -64,11 +64,10 @@ public class RobotVacuumCleaner
         if (_battery.GetCurrentChargeLevel() < requiredChargeToReturn)
         {
             Console.WriteLine("Low battery");
-            _brain.PopState();
             _brain.PushState(MoveBack);
             _brain.PushState(Charging);
             _brain.PushState(MoveHome);
-            _brain.PushState(CretePathToHome);
+            _brain.PushState(CretePath);
         }
         else if (_dustCollector.IsFull())
         {
@@ -82,7 +81,7 @@ public class RobotVacuumCleaner
         }
     }
 
-    private void CretePathToHome()
+    private void CretePath()
     {
         _navigator.CreatePath(_motionControl.GetCurrentPoint(), _basePoint);
         _brain.PopState();
