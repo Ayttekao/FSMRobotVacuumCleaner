@@ -10,11 +10,11 @@ public class Battery
         _currentChargeLevel = currentChargeLevel;
         _maxChargeLevel = maxChargeLevel;
     }
-    
+
     public bool IsDischarged() => _currentChargeLevel < _maxChargeLevel;
 
     public bool IsFullDischarged() => _currentChargeLevel == 0;
-    
+
     public bool IsFullCharged() => _currentChargeLevel == _maxChargeLevel;
 
     public int GetCurrentChargeLevel() => _currentChargeLevel;

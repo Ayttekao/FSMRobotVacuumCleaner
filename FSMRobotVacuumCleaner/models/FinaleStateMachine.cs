@@ -19,5 +19,4 @@ public class FinaleStateMachine
         if (GetCurrentState() != state)
             _stack.Push(state);
     }
-
 }

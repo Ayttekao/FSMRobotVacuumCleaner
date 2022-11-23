@@ -50,15 +50,15 @@ public class MotionControl
     private void Detour()
     {
         UpdateTimer();
-            if (_actionStart > _actionEnd)
-            {
-                TurnRight();
-                ResetTimer();
-            }
-            else
-            {
-                TurnLeft();
-            }
+        if (_actionStart > _actionEnd)
+        {
+            TurnRight();
+            ResetTimer();
+        }
+        else
+        {
+            TurnLeft();
+        }
     }
 
     private void UpdateTimer()

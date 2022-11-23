@@ -18,7 +18,7 @@ public class LeeAlgorithm : IPathFinder
         _width = GetListGraph().Count;
         _height = GetListGraph().First().Count;
     }
-    
+
     private List<List<int>> GetListGraph() => _map;
 
     private int GetWidth() => _width;

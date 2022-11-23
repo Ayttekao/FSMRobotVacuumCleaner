@@ -24,7 +24,7 @@ public class Navigator
         {
             throw new InvalidOperationException("_pathToStartPoint is empty");
         }
-        
+
         var coords = _pathToStartPoint.Pop();
 
         return new Point(coords.Item2, coords.Item1);
@@ -36,7 +36,7 @@ public class Navigator
         {
             throw new InvalidOperationException("_pathToDestinationPoint is empty");
         }
-        
+
         var coords = _pathToDestinationPoint.Pop();
 
         return new Point(coords.Item2, coords.Item1);

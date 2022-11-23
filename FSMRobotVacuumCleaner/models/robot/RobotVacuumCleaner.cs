@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using FSMRobotVacuumCleaner.algo;
 using FSMRobotVacuumCleaner.models.motion;
 
 namespace FSMRobotVacuumCleaner.models.robot;
@@ -96,7 +95,7 @@ public class RobotVacuumCleaner
         else
         {
             var destinationWaypoint = _navigator.GetDestinationWaypoint();
-            _motionControl.MoveToPoint(destinationWaypoint);   
+            _motionControl.MoveToPoint(destinationWaypoint);
         }
     }
 
