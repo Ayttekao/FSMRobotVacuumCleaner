@@ -6,11 +6,10 @@ namespace FSMRobotVacuumCleaner.models.motion;
 public class MotionControl
 {
     private List<List<int>> _map;
-    private Direction _currentDirection;
+    private RobotPosition _position;
     private TimeSpan _actionTimeout;
     private TimeOnly _actionStart;
     private TimeOnly _actionEnd;
-    private Point _currentPoint;
     private int _stepSize;
 
     public MotionControl(List<List<int>> map, TimeSpan actionTimeout, Point currentPoint, Direction currentDirection,
@@ -20,19 +19,18 @@ public class MotionControl
         _actionTimeout = actionTimeout;
         _actionStart = TimeOnly.MinValue;
         _actionEnd = TimeOnly.MinValue;
-        _currentPoint = currentPoint;
-        _currentDirection = currentDirection;
+        _position = new RobotPosition(currentPoint, currentDirection);
         _stepSize = stepSize;
     }
 
-    public Point GetCurrentPoint() => _currentPoint;
+    public Point GetCurrentPoint() => _position.GetPosition();
 
     public List<List<int>> GetMap() => _map;
 
     public void MoveToPoint(Point destination)
     {
-        TurnByMovingDirection(destination);
-        _currentPoint = destination;
+        _position.TurnByMovingDirection(destination);
+        _position.SetPosition(destination);
     }
 
     public void Move()
@@ -43,7 +41,7 @@ public class MotionControl
         }
         else
         {
-            MoveForward();
+            _position.MoveForward(_stepSize);
         }
     }
 
@@ -52,12 +50,12 @@ public class MotionControl
         UpdateTimer();
         if (_actionStart > _actionEnd)
         {
-            TurnRight();
+            _position.TurnRight();
             ResetTimer();
         }
         else
         {
-            TurnLeft();
+            _position.TurnLeft();
         }
     }
 
@@ -76,92 +74,23 @@ public class MotionControl
         _actionEnd = TimeOnly.MinValue;
     }
 
-    private void TurnByMovingDirection(Point destination)
-    {
-        if (_currentPoint.X > destination.X)
+    private bool IsEndMap() =>
+        _position.GetDirection() switch
         {
-            _currentDirection = Direction.Left;
-        }
-        else if (_currentPoint.X < destination.X)
-        {
-            _currentDirection = Direction.Right;
-        }
-        else if (_currentPoint.Y > destination.Y)
-        {
-            _currentDirection = Direction.Down;
-        }
-        else
-        {
-            _currentDirection = Direction.Down;
-        }
-    }
-
-    private void TurnLeft()
-    {
-        _currentDirection = _currentDirection switch
-        {
-            Direction.Up => Direction.Left,
-            Direction.Left => Direction.Down,
-            Direction.Down => Direction.Right,
-            Direction.Right => Direction.Up,
-            _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
+            Direction.Up => _position.GetPosition().Y - _stepSize < 0,
+            Direction.Down => _position.GetPosition().Y + _stepSize > _map.Count - 1,
+            Direction.Right => _position.GetPosition().X + _stepSize > _map.First().Count - 1,
+            Direction.Left => _position.GetPosition().X - _stepSize < 0,
+            _ => throw new ArgumentOutOfRangeException(nameof(_position.GetDirection))
         };
-    }
 
-    private void TurnRight()
-    {
-        _currentDirection = _currentDirection switch
+    private bool IsObstacleForward() =>
+        _position.GetDirection() switch
         {
-            Direction.Up => Direction.Right,
-            Direction.Right => Direction.Down,
-            Direction.Down => Direction.Left,
-            Direction.Left => Direction.Up,
-            _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
+            Direction.Up => _map[_position.GetPosition().Y - _stepSize][_position.GetPosition().X] == (int)PointType.Barrier,
+            Direction.Down => _map[_position.GetPosition().Y + _stepSize][_position.GetPosition().X] == (int)PointType.Barrier,
+            Direction.Right => _map[_position.GetPosition().Y][_position.GetPosition().X + _stepSize] == (int)PointType.Barrier,
+            Direction.Left => _map[_position.GetPosition().Y][_position.GetPosition().X - _stepSize] == (int)PointType.Barrier,
+            _ => throw new ArgumentOutOfRangeException(nameof(_position.GetDirection))
         };
-    }
-
-    private void MoveForward()
-    {
-        switch (_currentDirection)
-        {
-            case Direction.Up:
-                _currentPoint.Y -= _stepSize;
-                break;
-            case Direction.Down:
-                _currentPoint.Y += _stepSize;
-                break;
-            case Direction.Right:
-                _currentPoint.X += _stepSize;
-                break;
-            case Direction.Left:
-                _currentPoint.X -= _stepSize;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(_currentDirection));
-        }
-    }
-
-    private bool IsEndMap()
-    {
-        return _currentDirection switch
-        {
-            Direction.Up => _currentPoint.Y - _stepSize < 0,
-            Direction.Down => _currentPoint.Y + _stepSize > _map.Count - 1,
-            Direction.Right => _currentPoint.X + _stepSize > _map.First().Count - 1,
-            Direction.Left => _currentPoint.X - _stepSize < 0,
-            _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
-        };
-    }
-
-    private bool IsObstacleForward()
-    {
-        return _currentDirection switch
-        {
-            Direction.Up => _map[_currentPoint.Y - _stepSize][_currentPoint.X] == (int)PointType.Barrier,
-            Direction.Down => _map[_currentPoint.Y + _stepSize][_currentPoint.X] == (int)PointType.Barrier,
-            Direction.Right => _map[_currentPoint.Y][_currentPoint.X + _stepSize] == (int)PointType.Barrier,
-            Direction.Left => _map[_currentPoint.Y][_currentPoint.X - _stepSize] == (int)PointType.Barrier,
-            _ => throw new ArgumentOutOfRangeException(nameof(_currentDirection))
-        };
-    }
 }
