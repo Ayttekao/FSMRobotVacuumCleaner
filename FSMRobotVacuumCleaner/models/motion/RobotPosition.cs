@@ -85,4 +85,25 @@ public class RobotPosition
                 throw new ArgumentOutOfRangeException(nameof(_direction));
         }
     }
+    
+    public void MoveBackward(int stepSize)
+    {
+        switch (_direction)
+        {
+            case Direction.Up:
+                _point.Y += stepSize;
+                break;
+            case Direction.Down:
+                _point.Y -= stepSize;
+                break;
+            case Direction.Right:
+                _point.X -= stepSize;
+                break;
+            case Direction.Left:
+                _point.X += stepSize;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(_direction));
+        }
+    }
 }

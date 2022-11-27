@@ -30,8 +30,7 @@ namespace FSMRobotVacuumCleaner
             }
 
             var startPoint = new Point(0, 3);
-            var timeout = new TimeSpan(0, 0, 2);
-            var motion = new MotionControl(map.Select(x => x.ToList()).ToList(), timeout, startPoint, Direction.Down, 1);
+            var motion = new MotionControl(map.Select(x => x.ToList()).ToList(), startPoint, Direction.Up, 1);
             var battery = new Battery(80, 100);
             var dustCollector = new DustCollector(0, 100);
             var robot = new RobotVacuumCleaner(battery, dustCollector, motion);
