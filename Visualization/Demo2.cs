@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using FSMRobotVacuumCleaner.models.map;
-using Visualization.models.motion;
-using Visualization.models.robot;
+using FSMRobotVacuumCleaner.models.motion;
+using FSMRobotVacuumCleaner.models.robot;
 using WinFormAnimation_NET5;
 
 namespace Visualization
