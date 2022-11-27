@@ -87,7 +87,7 @@ namespace FSMRobotVacuumCleaner
                                 break;
                             case (int)PointType.Barrier:
                                 msg = string.Format("{0,3}", "*");
-                                Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.ForegroundColor = ConsoleColor.DarkYellow;
                                 break;
                             default:
                                 msg = string.Format("{0,3}", array[i][j]);
