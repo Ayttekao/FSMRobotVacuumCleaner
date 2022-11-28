@@ -29,69 +29,96 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.createRobot = new System.Windows.Forms.Button();
-            this.drawingSurface = new Visualization.DrawingSurface();
-            this.moveButton = new System.Windows.Forms.Button();
             this.demo21 = new Visualization.Demo2();
+            this.topPanel = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.hideForm = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.topPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // createRobot
-            // 
-            this.createRobot.Location = new System.Drawing.Point(495, 12);
-            this.createRobot.Name = "createRobot";
-            this.createRobot.Size = new System.Drawing.Size(82, 23);
-            this.createRobot.TabIndex = 0;
-            this.createRobot.Text = "Create";
-            this.createRobot.UseVisualStyleBackColor = true;
-            this.createRobot.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CreateRobotButtonChangeState);
-            // 
-            // drawingSurface
-            // 
-            this.drawingSurface.Location = new System.Drawing.Point(12, 12);
-            this.drawingSurface.Name = "drawingSurface";
-            this.drawingSurface.Size = new System.Drawing.Size(472, 227);
-            this.drawingSurface.TabIndex = 1;
-            this.drawingSurface.MouseClick += new System.Windows.Forms.MouseEventHandler(this.AddObject);
-            // 
-            // moveButton
-            // 
-            this.moveButton.Location = new System.Drawing.Point(495, 48);
-            this.moveButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.moveButton.Name = "moveButton";
-            this.moveButton.Size = new System.Drawing.Size(82, 22);
-            this.moveButton.TabIndex = 2;
-            this.moveButton.Text = "Move";
-            this.moveButton.UseVisualStyleBackColor = true;
-            this.moveButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MoveRobotButton);
             // 
             // demo21
             // 
-            this.demo21.Location = new System.Drawing.Point(12, 245);
+            this.demo21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.demo21.Location = new System.Drawing.Point(13, 55);
             this.demo21.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.demo21.Name = "demo21";
             this.demo21.Size = new System.Drawing.Size(500, 320);
             this.demo21.TabIndex = 3;
+            // 
+            // topPanel
+            // 
+            this.topPanel.BackColor = System.Drawing.Color.MidnightBlue;
+            this.topPanel.Controls.Add(this.label1);
+            this.topPanel.Controls.Add(this.button2);
+            this.topPanel.Controls.Add(this.hideForm);
+            this.topPanel.Location = new System.Drawing.Point(0, 1);
+            this.topPanel.Name = "topPanel";
+            this.topPanel.Size = new System.Drawing.Size(660, 37);
+            this.topPanel.TabIndex = 4;
+            this.topPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MakeDragable);
+            this.topPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DragForm);
+            this.topPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DisableDrag);
+            // 
+            // button2
+            // 
+            this.button2.BackgroundImage = global::Visualization.Properties.Resources.icons8_delete_64px;
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.button2.Location = new System.Drawing.Point(627, 0);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(33, 37);
+            this.button2.TabIndex = 1;
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.CloseForm_Click);
+            // 
+            // hideForm
+            // 
+            this.hideForm.BackgroundImage = global::Visualization.Properties.Resources.icons8_subtract_64px;
+            this.hideForm.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.hideForm.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.hideForm.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.hideForm.Location = new System.Drawing.Point(588, 0);
+            this.hideForm.Name = "hideForm";
+            this.hideForm.Size = new System.Drawing.Size(33, 37);
+            this.hideForm.TabIndex = 0;
+            this.hideForm.UseVisualStyleBackColor = true;
+            this.hideForm.Click += new System.EventHandler(this.HideForm_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Verdana", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(3, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(227, 23);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Robot Vacuum Cleaner";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.ClientSize = new System.Drawing.Size(800, 577);
+            this.ClientSize = new System.Drawing.Size(660, 430);
+            this.Controls.Add(this.topPanel);
             this.Controls.Add(this.demo21);
-            this.Controls.Add(this.moveButton);
-            this.Controls.Add(this.drawingSurface);
-            this.Controls.Add(this.createRobot);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.topPanel.ResumeLayout(false);
+            this.topPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Button createRobot;
-        private DrawingSurface drawingSurface;
-        private System.Windows.Forms.Button moveButton;
         private Demo2 demo21;
+        private System.Windows.Forms.Panel topPanel;
+        private System.Windows.Forms.Button hideForm;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label1;
     }
 }

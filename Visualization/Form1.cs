@@ -1,43 +1,47 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Visualization
 {
     public partial class Form1 : Form
     {
-        private bool _createRobotButtonClicked = false;
-        private bool _moveRobot = false;
-        
+        private bool dragable;
+        private Point startPosition;
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        public void CreateRobotButtonChangeState(object sender, MouseEventArgs e)
+        private void MakeDragable(object sender, MouseEventArgs e)
         {
-            _createRobotButtonClicked = !_createRobotButtonClicked;
-            Debug.WriteLine($"Clicked {_createRobotButtonClicked}");
+            dragable = true;
+            startPosition = e.Location;
         }
-        
-        private void AddObject(object sender, MouseEventArgs e)
+
+        private void DragForm(object sender, MouseEventArgs e)
         {
-            if (_createRobotButtonClicked)
+            if (dragable)
             {
-                drawingSurface.AddRobot(e);
+                Location = new Point(Cursor.Position.X - startPosition.X, Cursor.Position.Y - startPosition.Y);
             }
         }
 
-        private void MoveRobotButton(object sender, MouseEventArgs e)
+        private void DisableDrag(object sender, MouseEventArgs e)
         {
-            _moveRobot = !_moveRobot;
-            if (_moveRobot)
-            {
-                drawingSurface.MoveRobot();
-            }
-            else
-            {
-                // drawingSurface.StopRobot();
-            }
+            dragable = false;
+        }
+
+        private void HideForm_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void CloseForm_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

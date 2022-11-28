@@ -23,6 +23,8 @@ public class RobotVacuumCleaner
         _basePoint = motionControl.GetCurrentPoint();
     }
 
+    public string GetStateName() => _brain.GetStateName();
+
     public void Update()
     {
         _brain.Update();
