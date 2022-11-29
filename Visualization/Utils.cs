@@ -21,7 +21,7 @@ public static class Utils
             i = rand.Next(map.Count);
         }
 
-        return new Point(i, j);
+        return new Point(j, i);
     }
 
     public static List<List<int>> GenerateMap(int height, int width)

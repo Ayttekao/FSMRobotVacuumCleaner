@@ -13,8 +13,6 @@ namespace Visualization
     internal partial class Demo2 : UserControl
     {
         private readonly Animator2D _animator = new();
-        private readonly List<List<int>> _map;
-        private List<PictureBox> _obstacleBoxes;
         private PictureBox _robotPicture;
         private RobotVacuumCleaner _robot;
         private int _scale = 25;
@@ -23,9 +21,9 @@ namespace Visualization
         public Demo2()
         {
             InitializeComponent();
-            _map = Utils.GenerateMap(10, 11);
-            _obstacleBoxes = Utils.GetObstacleBoxes(_map, _scale);
-            var randomStartPoint = Utils.RandomStartPoint(_map);
+            var map = Utils.GenerateMap(10, 11);
+            var obstacleBoxes = Utils.GetObstacleBoxes(map, _scale);
+            var randomStartPoint = Utils.RandomStartPoint(map);
             _robotPicture =
                 Utils.CreatePictureBox
                 (
@@ -34,13 +32,13 @@ namespace Visualization
                     new Size(_scale, _scale)
                 );
             Controls.Add(_robotPicture);
-            AddToControls(_obstacleBoxes);
+            AddToControls(obstacleBoxes);
 
             _robot = new RobotVacuumCleaner
             (
                 new Battery(90, 100),
                 new DustCollector(0, 1000),
-                new MotionControl(_map, randomStartPoint, Direction.Down, 1)
+                new MotionControl(map, randomStartPoint, Direction.Down, 1)
             );
         }
 

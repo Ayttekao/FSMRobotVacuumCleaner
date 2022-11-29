@@ -30,7 +30,7 @@ public class MotionControl
     {
         if (IsEndMap() || IsObstacleForward())
         {
-            var count = new Random().Next(1, 2);
+            var count = new Random().Next(1, 3);
             for (var i = 0; i < count; i++)
             {
                 _position.TurnRight();
