@@ -23,7 +23,7 @@ namespace Visualization
         public Demo2()
         {
             InitializeComponent();
-            _map = Utils.GenerateMap(10, 10);
+            _map = Utils.GenerateMap(10, 11);
             _obstacleBoxes = Utils.GetObstacleBoxes(_map, _scale);
             var randomStartPoint = Utils.RandomStartPoint(_map);
             _robotPicture =
@@ -62,7 +62,7 @@ namespace Visualization
             while (true)
             {
                 var duration = 150UL;
-                var delayForAnimation = 350;
+                var delayForAnimation = 500;
                 var startPoint = new Point(_robot.GetCurrentPoint().X * _scale, _robot.GetCurrentPoint().Y * _scale);
                 _robot.Update();
                 var endPoint = new Point(_robot.GetCurrentPoint().X * _scale, _robot.GetCurrentPoint().Y * _scale);

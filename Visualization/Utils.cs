@@ -12,10 +12,10 @@ public static class Utils
     public static Point RandomStartPoint(List<List<int>> map)
     {
         var rand = new Random();
-        var j = rand.Next(map.First().Count);
         var i = rand.Next(map.Count);
+        var j = rand.Next(map.First().Count);
 
-        while (map[i][j] != (int)PointType.Barrier)
+        while (map[i][j] == (int)PointType.Barrier)
         {
             j = rand.Next(map.First().Count);
             i = rand.Next(map.Count);
