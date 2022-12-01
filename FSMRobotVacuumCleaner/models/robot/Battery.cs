@@ -37,5 +37,10 @@ public class Battery
         {
             _currentChargeLevel += number;
         }
+
+        if (_currentChargeLevel > _maxChargeLevel)
+        {
+            _currentChargeLevel = _maxChargeLevel;
+        }
     }
 }

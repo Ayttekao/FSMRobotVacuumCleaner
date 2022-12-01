@@ -1,37 +1,51 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Visualization
 {
     public partial class Form1 : Form
     {
-        private bool dragable;
-        private Point startPosition;
+        private bool _dragable;
+        private Point _startPosition;
 
         public Form1()
         {
             InitializeComponent();
+            FormBorderStyle = FormBorderStyle.None;
+            Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, Width, Height, 40, 40));
         }
+
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+        (
+            int nLeftRect,
+            int nTopRect,
+            int nRightRect,
+            int nBottomRect,
+            int nWidthEllipse,
+            int nHeightEllipse
+        );
+
 
         private void MakeDragable(object sender, MouseEventArgs e)
         {
-            dragable = true;
-            startPosition = e.Location;
+            _dragable = true;
+            _startPosition = e.Location;
         }
 
         private void DragForm(object sender, MouseEventArgs e)
         {
-            if (dragable)
+            if (_dragable)
             {
-                Location = new Point(Cursor.Position.X - startPosition.X, Cursor.Position.Y - startPosition.Y);
+                Location = new Point(Cursor.Position.X - _startPosition.X, Cursor.Position.Y - _startPosition.Y);
             }
         }
 
         private void DisableDrag(object sender, MouseEventArgs e)
         {
-            dragable = false;
+            _dragable = false;
         }
 
         private void HideForm_Click(object sender, EventArgs e)

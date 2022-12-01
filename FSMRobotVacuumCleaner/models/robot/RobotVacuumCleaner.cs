@@ -29,6 +29,8 @@ public class RobotVacuumCleaner
 
     public int GetCurrentCharge() => _battery.GetCurrentChargeLevel();
 
+    public void CleanDustCollector() => _dustCollector.Clean();
+
     public void Update()
     {
         _brain.Update();
@@ -51,7 +53,7 @@ public class RobotVacuumCleaner
 
     private void Charging()
     {
-        const int AmountChargeReceived = 5;
+        const int amountChargeReceived = 10;
 
         if (_battery.IsFullCharged())
         {
@@ -59,7 +61,7 @@ public class RobotVacuumCleaner
         }
         else
         {
-            _battery.Charging(AmountChargeReceived);
+            _battery.Charging(amountChargeReceived);
         }
     }
 
@@ -76,14 +78,19 @@ public class RobotVacuumCleaner
         }
         else if (_dustCollector.IsFull())
         {
-            Console.WriteLine("Dust collector is full");
+            _brain.PushState(WaitCleaningDustCollector);
         }
         else
         {
             _battery.Discharge(1);
-            _dustCollector.Fill(0);
+            _dustCollector.Fill(1);
             _brain.PushState(Move);
         }
+    }
+
+    private void WaitCleaningDustCollector()
+    {
+        _brain.PopState();
     }
 
     private void CretePath()

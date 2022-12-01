@@ -4,9 +4,6 @@
     <Compile Update="Demo2.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="DrawingSurface.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

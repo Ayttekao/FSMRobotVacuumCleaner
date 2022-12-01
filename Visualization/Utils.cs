@@ -47,7 +47,7 @@ public static class Utils
     public static List<PictureBox> GetObstacleBoxes(List<List<int>> map, int scale)
     {
         var list = new List<PictureBox>();
-        var image = Properties.Resources.crate_0;
+        var image = Properties.Resources.crate_1;
 
         for (var i = 0; i < map.Count; i++)
         {

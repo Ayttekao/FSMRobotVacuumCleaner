@@ -17,13 +17,14 @@ namespace Visualization
         private PictureBox _dockstationPicture;
         private RobotVacuumCleaner _robot;
         private static CancellationTokenSource _tokenSource = new();
-        private int _scale = 25;
+        private int _scale = 35;
         private int _maxChargeLevel = 100;
 
 
         public Demo2()
         {
             InitializeComponent();
+            SetVisible(false);
             var map = Utils.GenerateMap(10, 11);
             var obstacleBoxes = Utils.GetObstacleBoxes(map, _scale);
             var randomStartPoint = Utils.RandomStartPoint(map);
@@ -43,7 +44,9 @@ namespace Visualization
                     new Point(randomStartPoint.X * _scale, randomStartPoint.Y * _scale),
                     new Size(_scale, _scale)
                 );
-            
+
+            _robotPicture.MouseClick += RobotPictureClick;
+
             Controls.Add(_robotPicture);
             Controls.Add(_dockstationPicture);
             AddToControls(obstacleBoxes);
@@ -51,7 +54,7 @@ namespace Visualization
             _robot = new RobotVacuumCleaner
             (
                 new Battery(90, _maxChargeLevel),
-                new DustCollector(0, 1000),
+                new DustCollector(0, 100),
                 new MotionControl(map, randomStartPoint, Direction.Down, 1)
             );
         }
@@ -84,8 +87,8 @@ namespace Visualization
         {
             while (!token.IsCancellationRequested)
             {
-                var duration = 150UL;
-                var delayForAnimation = 500;
+                const ulong duration = 150UL;
+                const int delayForAnimation = 500;
                 var startPoint = new Point(_robot.GetCurrentPoint().X * _scale, _robot.GetCurrentPoint().Y * _scale);
                 
                 _robot.Update();
@@ -104,10 +107,42 @@ namespace Visualization
                 _animator.Play(_robotPicture, Animator2D.KnownProperties.Location);
 
                 Thread.Sleep(((int)duration + delayForAnimation));
-                stateLabel.Text = $@"Current state: {_robot.GetStateName()}";
+                SetText($"{_robot.GetStateName()}");
+
+                SetVisible(_robot.GetStateName() == @"WaitCleaningDustCollector");
             }
 
             return Task.CompletedTask;
+        }
+
+        private delegate void SetTextCallback(string text);
+
+        private delegate void SetVisibleCallback(bool state);
+
+        private void SetVisible(bool state)
+        {
+            if (imageFull.InvokeRequired)
+            {
+                var d = new SetVisibleCallback(SetVisible);
+                Invoke(d, state);
+            }
+            else
+            {
+                imageFull.Visible = state;
+            }
+        }
+
+        private void SetText(string text)
+        {
+            if (stateTextBox.InvokeRequired)
+            { 
+                var d = new SetTextCallback(SetText);
+                Invoke(d, text);
+            }
+            else
+            {
+                stateTextBox.Text = text;
+            }
         }
 
         private void DisplayCharge(int charge)
@@ -136,6 +171,11 @@ namespace Visualization
             };
 
             _robotPicture.Image = image;
+        }
+
+        private void RobotPictureClick(object? sender, MouseEventArgs e)
+        {
+            _robot.CleanDustCollector();
         }
     }
 }

@@ -13,6 +13,8 @@ public class DustCollector
 
     public bool IsFull() => _capacity <= _currentOccupancy;
 
+    public bool IsEmpty() => _currentOccupancy == 0;
+
     public void Fill(int amountOfDust)
     {
         if (IsFull())
