@@ -15,7 +15,9 @@ namespace Visualization
         private readonly Animator2D _animator = new();
         private PictureBox _robotPicture;
         private RobotVacuumCleaner _robot;
+        private static CancellationTokenSource _tokenSource = new();
         private int _scale = 25;
+        private int _maxChargeLevel = 100;
 
 
         public Demo2()
@@ -36,7 +38,7 @@ namespace Visualization
 
             _robot = new RobotVacuumCleaner
             (
-                new Battery(90, 100),
+                new Battery(90, _maxChargeLevel),
                 new DustCollector(0, 1000),
                 new MotionControl(map, randomStartPoint, Direction.Down, 1)
             );
@@ -50,37 +52,78 @@ namespace Visualization
             }
         }
 
-        private async void PlayButton(object sender, EventArgs e)
+        private async void StartStopButtonClick(object sender, EventArgs e)
         {
-            await Task.Run(() => Cleaning());
+            if (btn_play.Text == @"Start")
+            {
+                btn_play.Text = @"Stop";
+                _tokenSource.Dispose();
+                _tokenSource = new CancellationTokenSource();
+                await Task.Run(() => Cleaning(_tokenSource.Token), _tokenSource.Token);
+            }
+            else
+            {
+                btn_play.Text = @"Start";
+                _tokenSource.Cancel();
+            }
         }
 
-        private Task Cleaning()
+        private Task Cleaning(CancellationToken token)
         {
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 var duration = 150UL;
                 var delayForAnimation = 500;
                 var startPoint = new Point(_robot.GetCurrentPoint().X * _scale, _robot.GetCurrentPoint().Y * _scale);
+                
                 _robot.Update();
                 var endPoint = new Point(_robot.GetCurrentPoint().X * _scale, _robot.GetCurrentPoint().Y * _scale);
+                
+                RotateRobot(_robot.GetDirection());
+                DisplayCharge(_robot.GetCurrentCharge());
+
                 _animator.Paths = new Path2D
                 (
                     new Float2D(startPoint.X, startPoint.Y),
                     new Float2D(startPoint.X, startPoint.Y),
                     duration
                 ).ContinueTo(new Float2D(endPoint.X, endPoint.Y), duration);
+
                 _animator.Play(_robotPicture, Animator2D.KnownProperties.Location);
-                stateLabel.Text = $@"Current state: {_robot.GetStateName()}";
+
                 Thread.Sleep(((int)duration + delayForAnimation));
+                stateLabel.Text = $@"Current state: {_robot.GetStateName()}";
             }
 
             return Task.CompletedTask;
         }
 
-        private void StopButton(object sender, EventArgs e)
+        private void DisplayCharge(int charge)
         {
-            _animator.Stop();
+            Image image = charge switch
+            {
+                < 20 => Properties.Resources.BATTERY_20,
+                < 40 => Properties.Resources.BATTERY_40,
+                < 60 => Properties.Resources.BATTERY_60,
+                < 80 => Properties.Resources.BATTERY_80,
+                _ => Properties.Resources.BATTERY_100
+            };
+
+            batteryImage.Image = image;
+        }
+        
+        private void RotateRobot(Direction direction)
+        {
+            var image = direction switch
+            {
+                Direction.Up => Properties.Resources.RVC_UP,
+                Direction.Down => Properties.Resources.RVC_DOWN,
+                Direction.Left => Properties.Resources.RVC_LEFT,
+                Direction.Right => Properties.Resources.RVC_RIGHT,
+                _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
+            };
+
+            _robotPicture.Image = image;
         }
     }
 }

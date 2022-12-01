@@ -25,6 +25,10 @@ public class RobotVacuumCleaner
 
     public string GetStateName() => _brain.GetStateName();
 
+    public Direction GetDirection() => _motionControl.GetDirection();
+
+    public int GetCurrentCharge() => _battery.GetCurrentChargeLevel();
+
     public void Update()
     {
         _brain.Update();

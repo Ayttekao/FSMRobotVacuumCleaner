@@ -18,6 +18,8 @@ public class MotionControl
 
     public Point GetCurrentPoint() => _position.GetPosition();
 
+    public Direction GetDirection() => _position.GetDirection();
+
     public List<List<int>> GetMap() => _map;
 
     public void MoveToPoint(Point destination)
