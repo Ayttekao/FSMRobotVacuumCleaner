@@ -65,7 +65,7 @@ public class RobotVacuumCleaner
 
     private void Cleaning()
     {
-        var requiredChargeToReturn = 5;
+        var requiredChargeToReturn = 20;
         if (_battery.GetCurrentChargeLevel() < requiredChargeToReturn)
         {
             Console.WriteLine("Low battery");
@@ -80,7 +80,7 @@ public class RobotVacuumCleaner
         }
         else
         {
-            _battery.Discharge(5);
+            _battery.Discharge(1);
             _dustCollector.Fill(0);
             _brain.PushState(Move);
         }

@@ -14,6 +14,7 @@ namespace Visualization
     {
         private readonly Animator2D _animator = new();
         private PictureBox _robotPicture;
+        private PictureBox _dockstationPicture;
         private RobotVacuumCleaner _robot;
         private static CancellationTokenSource _tokenSource = new();
         private int _scale = 25;
@@ -26,14 +27,25 @@ namespace Visualization
             var map = Utils.GenerateMap(10, 11);
             var obstacleBoxes = Utils.GetObstacleBoxes(map, _scale);
             var randomStartPoint = Utils.RandomStartPoint(map);
-            _robotPicture =
+            
+            _dockstationPicture =
                 Utils.CreatePictureBox
                 (
-                    Properties.Resources.RVC,
+                    Properties.Resources.dockstation,
                     new Point(randomStartPoint.X * _scale, randomStartPoint.Y * _scale),
                     new Size(_scale, _scale)
                 );
+            
+            _robotPicture =
+                Utils.CreatePictureBox
+                (
+                    Properties.Resources.RVC_DOWN,
+                    new Point(randomStartPoint.X * _scale, randomStartPoint.Y * _scale),
+                    new Size(_scale, _scale)
+                );
+            
             Controls.Add(_robotPicture);
+            Controls.Add(_dockstationPicture);
             AddToControls(obstacleBoxes);
 
             _robot = new RobotVacuumCleaner
