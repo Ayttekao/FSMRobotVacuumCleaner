@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using FSMRobotVacuumCleaner.models.map;
+using FSMRobotVacuumCleaner.Models.Map;
 
 namespace Visualization;
 

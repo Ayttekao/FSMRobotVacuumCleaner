@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace FSMRobotVacuumCleaner.algo;
+namespace FSMRobotVacuumCleaner.Algo;
 
 public interface IPathFinder
 {

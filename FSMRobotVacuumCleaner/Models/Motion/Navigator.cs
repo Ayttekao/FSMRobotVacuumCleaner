@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using FSMRobotVacuumCleaner.algo;
+using FSMRobotVacuumCleaner.Algo;
 
-namespace FSMRobotVacuumCleaner.models.motion;
+namespace FSMRobotVacuumCleaner.Models.Motion;
 
 public class Navigator
 {

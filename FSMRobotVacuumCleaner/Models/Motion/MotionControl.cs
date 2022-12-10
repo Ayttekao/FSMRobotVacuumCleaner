@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using FSMRobotVacuumCleaner.models.map;
+using FSMRobotVacuumCleaner.Models.Map;
 
-namespace FSMRobotVacuumCleaner.models.motion;
+namespace FSMRobotVacuumCleaner.Models.Motion;
 
 public class MotionControl
 {

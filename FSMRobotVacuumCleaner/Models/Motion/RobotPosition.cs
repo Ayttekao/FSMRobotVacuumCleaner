@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace FSMRobotVacuumCleaner.models.motion;
+namespace FSMRobotVacuumCleaner.Models.Motion;
 
 public class RobotPosition
 {

@@ -1,4 +1,4 @@
-﻿namespace FSMRobotVacuumCleaner.models.map;
+﻿namespace FSMRobotVacuumCleaner.Models.Map;
 
 public enum PointType
 {

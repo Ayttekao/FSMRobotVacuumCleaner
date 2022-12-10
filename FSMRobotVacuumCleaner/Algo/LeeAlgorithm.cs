@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using FSMRobotVacuumCleaner.models.map;
+using FSMRobotVacuumCleaner.Models.Map;
 
-namespace FSMRobotVacuumCleaner.algo;
+namespace FSMRobotVacuumCleaner.Algo;
 
 public class LeeAlgorithm : IPathFinder
 {

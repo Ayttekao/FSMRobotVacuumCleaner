@@ -1,4 +1,4 @@
-﻿namespace FSMRobotVacuumCleaner.models.robot;
+﻿namespace FSMRobotVacuumCleaner.Models.Robot;
 
 public class DustCollector
 {

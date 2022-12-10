@@ -1,4 +1,4 @@
-﻿namespace FSMRobotVacuumCleaner.models;
+﻿namespace FSMRobotVacuumCleaner.Models;
 
 public class FinaleStateMachine
 {

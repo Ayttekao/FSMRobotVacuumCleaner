@@ -4,8 +4,8 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using FSMRobotVacuumCleaner.models.motion;
-using FSMRobotVacuumCleaner.models.robot;
+using FSMRobotVacuumCleaner.Models.Motion;
+using FSMRobotVacuumCleaner.Models.Robot;
 using WinFormAnimation_NET5;
 
 namespace Visualization

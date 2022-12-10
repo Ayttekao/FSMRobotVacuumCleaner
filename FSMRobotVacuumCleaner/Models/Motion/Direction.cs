@@ -1,4 +1,4 @@
-﻿namespace FSMRobotVacuumCleaner.models.motion;
+﻿namespace FSMRobotVacuumCleaner.Models.Motion;
 
 public enum Direction
 {
